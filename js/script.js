@@ -9,6 +9,10 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         addTodo();
     });
+
+    if (isStorageExist()) {
+        loadDataFromStorage();
+    }
 });
 
 document.addEventListener(RENDER_EVENT, function () {
@@ -171,3 +175,16 @@ function isStorageExist() /* boolean */ {
 document.addEventListener(SAVED_EVENT, function () {
     console.log(localStorage.getItem(STORAGE_KEY));
 });
+
+function loadDataFromStorage() {
+    const serializedData = localStorage.getItem(STORAGE_KEY);
+    let data = JSON.parse(serializedData);
+
+    if (data !== null) {
+        for (const todo of data) {
+            todos.push(todo);
+        }
+    }
+
+    document.dispatchEvent(new Event(RENDER_EVENT));
+}
